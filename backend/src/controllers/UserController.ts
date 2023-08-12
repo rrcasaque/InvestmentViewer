@@ -67,8 +67,8 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const JwtPayload = new JwtToken(
       keepConnected
-        ? new Date(new Date().getTime() + 3600 * 24 * 30).getTime()
-        : new Date(new Date().getTime() + 3600 * 24).getTime(),
+        ? new Date(new Date().getTime() + 1000 * 60 * 60 * 24 * 30).getTime()
+        : new Date(new Date().getTime() + 1000 * 60 * 60 * 24).getTime(),
       new Date().getTime(),
       new Date().getTime(),
       req.socket.remoteAddress as string

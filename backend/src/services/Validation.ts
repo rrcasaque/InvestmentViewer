@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 export type UserType = z.infer<typeof Validation.User>;
 
+export type JWTTokenType = z.infer<typeof Validation.JWTToken>;
+
 export class Validation {
   static User = z.object({
     name: z.string({ required_error: 'name property is required' }),
@@ -19,5 +21,8 @@ export class Validation {
       .string()
       .url({ message: 'profileImage must be a valid url address' })
       .optional(),
+  });
+  static JWTToken = z.string({
+    required_error: 'token is required to access this route',
   });
 }
