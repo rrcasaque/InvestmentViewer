@@ -27,7 +27,7 @@ export const createUser = async (req: Request, res: Response) => {
       },
     });
     const JwtPayload = new JwtToken(
-      'rrcasaque@hotmail.com',
+      userObj.getEmail(),
       new Date(new Date().getTime() + 3600 * 24).getTime(),
       new Date().getTime(),
       new Date().getTime(),
@@ -41,22 +41,39 @@ export const createUser = async (req: Request, res: Response) => {
   }
 };
 
-export const teste = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   try {
+    const { email, password, keepConnected } = req.body;
+    Validation.User.parse({
+      email: email,
+      password: password,
+      name: 'userNameUnecessary',
+    });
+
+    const user = await UserRepository.findFirst({
+      where: {
+        email: email,
+        AND: {
+          password: password,
+        },
+      },
+    });
+    if (!user) throw new Error('invalid credentials');
+
     const JwtPayload = new JwtToken(
-      'rrcasaque@hotmail.com',
-      new Date(new Date().getTime() + 3600 * 24).getTime(),
+      email,
+      keepConnected
+        ? new Date(new Date().getTime() + 3600 * 24 * 30).getTime()
+        : new Date(new Date().getTime() + 3600 * 24).getTime(),
       new Date().getTime(),
       new Date().getTime(),
       req.socket.remoteAddress as string
     );
+
+    console.log(JwtPayload.getExpirationTime());
+
     const token = JsonWebToken.generateToken(JwtPayload);
-    JsonWebToken.verifytoken(
-      token,
-      req.socket.remoteAddress as string,
-      'rrcasaque@hotmail.co'
-    );
-    return res.send('certo');
+    return res.status(200).json({ user, token });
   } catch (error) {
     const errors = HandleError.getErrors(error);
     res.status(errors.status).json(errors.message);
