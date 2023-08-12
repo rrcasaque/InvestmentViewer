@@ -1,9 +1,23 @@
 import { z } from 'zod';
 
-export type ExampleType = z.infer<typeof Validation.ExampleSchema>;
+export type UserType = z.infer<typeof Validation.User>;
 
 export class Validation {
-  static ExampleSchema = z.object({
-    name: z.string().min(3, { message: 'minimum 3 digits' }),
+  static User = z.object({
+    name: z.string({ required_error: 'name property is required' }),
+    email: z
+      .string({ required_error: 'email property is required' })
+      .email({ message: 'invalid email' }),
+    password: z
+      .string({ required_error: 'password property is required' })
+      .min(8, { message: 'minimum 8 digits' })
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
+        { message: 'password must be stronger' }
+      ),
+    profileImage: z
+      .string()
+      .url({ message: 'profileImage must be a valid url address' })
+      .optional(),
   });
 }

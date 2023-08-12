@@ -1,7 +1,7 @@
 import express from 'express';
-import { exampleRoute } from './routes/ExampleRoute';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJson from './swagger.json';
+import { UserRoute } from './routes/UserRoute';
 
 const app = express();
 const port = 3000;
@@ -16,6 +16,6 @@ app.use(
 
 app.use('/docs', swaggerUI.serve, swaggerUI.setup(swaggerJson));
 
-app.use('/example', exampleRoute);
+app.use('/user', UserRoute);
 
 app.listen(port, () => console.log(`API listening on port ${port}!`));
