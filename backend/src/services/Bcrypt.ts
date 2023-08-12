@@ -1,13 +1,15 @@
 import { ICryptography } from './interfaces/ICryptography';
+import bcrypt from 'bcrypt';
 
-export class Bcrypt implements ICryptography {
-  encrypt(password: string): string {
-    throw new Error('Method not implemented.');
+export class Bcryptography implements ICryptography {
+  encrypt(password: string, saltRounds: number): Promise<string> {
+    const hash = bcrypt.hash(password, saltRounds);
+    return hash;
   }
-  decode(encryptedPassword: string): string {
-    throw new Error('Method not implemented.');
-  }
-  verify(password: string, encryptedPassword: string): boolean {
-    throw new Error('Method not implemented.');
+  decrypt(password: string, encryptedPassword: string): Promise<boolean> {
+    const result = bcrypt.compare(password, encryptedPassword);
+    return result;
   }
 }
+
+export const Bcrypt = new Bcryptography();

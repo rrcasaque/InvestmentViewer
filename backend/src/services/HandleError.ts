@@ -2,6 +2,11 @@ import { ZodError } from 'zod';
 
 export class HandleError {
   static getErrors(error: any) {
+    if (error.message === 'unauthorized access, password is incorrect')
+      return {
+        status: 401,
+        message: { message: error.message },
+      };
     if (error.message.split(':')[0] === 'invalid token')
       return {
         status: 401,

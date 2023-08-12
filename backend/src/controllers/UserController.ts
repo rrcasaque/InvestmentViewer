@@ -5,6 +5,7 @@ import { UserRepository } from '../repositories/UserRepository';
 import { HandleError } from '../services/HandleError';
 import { JsonWebToken } from '../services/JsonWebToken';
 import { JwtToken } from '../models/JwtToken';
+import { Bcrypt } from '../services/Bcrypt';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -23,7 +24,10 @@ export const createUser = async (req: Request, res: Response) => {
       data: {
         email: userObj.getEmail(),
         name: userObj.getName(),
-        password: userObj.getPassword(),
+        password: await Bcrypt.encrypt(
+          userObj.getPassword(),
+          parseInt(process.env.SALT_NUMBER as string)
+        ),
       },
     });
     const JwtPayload = new JwtToken(
@@ -53,12 +57,14 @@ export const loginUser = async (req: Request, res: Response) => {
     const user = await UserRepository.findFirst({
       where: {
         email: email,
-        AND: {
-          password: password,
-        },
       },
     });
     if (!user) throw new Error('invalid credentials');
+
+    const autorized = await Bcrypt.decrypt(password, user.password);
+
+    if (!autorized)
+      throw new Error('unauthorized access, password is incorrect');
 
     const JwtPayload = new JwtToken(
       email,
@@ -69,8 +75,6 @@ export const loginUser = async (req: Request, res: Response) => {
       new Date().getTime(),
       req.socket.remoteAddress as string
     );
-
-    console.log(JwtPayload.getExpirationTime());
 
     const token = JsonWebToken.generateToken(JwtPayload);
     return res.status(200).json({ user, token });
