@@ -31,7 +31,6 @@ export const createUser = async (req: Request, res: Response) => {
       },
     });
     const JwtPayload = new JwtToken(
-      userObj.getEmail(),
       new Date(new Date().getTime() + 3600 * 24).getTime(),
       new Date().getTime(),
       new Date().getTime(),
@@ -67,7 +66,6 @@ export const loginUser = async (req: Request, res: Response) => {
       throw new Error('unauthorized access, password is incorrect');
 
     const JwtPayload = new JwtToken(
-      email,
       keepConnected
         ? new Date(new Date().getTime() + 3600 * 24 * 30).getTime()
         : new Date(new Date().getTime() + 3600 * 24).getTime(),

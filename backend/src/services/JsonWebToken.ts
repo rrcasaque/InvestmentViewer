@@ -6,7 +6,6 @@ class JWT implements IJWT {
   generateToken(tokenPayload: JwtToken): string {
     const JwtPayload: JwtPayload = {
       iss: process.env.JWT_ISSUER,
-      sub: tokenPayload.getSubject(),
       exp: tokenPayload.getExpirationTime(),
       nbf: tokenPayload.getNotBefore(),
       iat: tokenPayload.getIssedAt(),
@@ -18,7 +17,7 @@ class JWT implements IJWT {
     });
     return token;
   }
-  verifytoken(token: string, userIP: string, userId: string): void {
+  verifytoken(token: string, userIP: string): void {
     const JwtPayload = decode(token) as JwtPayload;
     if (JwtPayload.aud !== process.env.API_URL)
       throw new Error('invalid token: audience is not valid for this address');
@@ -34,10 +33,6 @@ class JWT implements IJWT {
       );
     if ((JwtPayload.nbf as number) >= new Date().getTime())
       throw new Error('invalid token: this token is not yet valid');
-    if (JwtPayload.sub !== userId)
-      throw new Error(
-        'invalid token: this token does not belong to this email address'
-      );
   }
 }
 
