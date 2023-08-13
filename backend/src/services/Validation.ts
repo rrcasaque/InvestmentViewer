@@ -4,6 +4,8 @@ export type UserType = z.infer<typeof Validation.User>;
 
 export type JWTTokenType = z.infer<typeof Validation.JWTToken>;
 
+export type RecoveryEmailType = z.infer<typeof Validation.RecoveryEmail>;
+
 export class Validation {
   static User = z.object({
     name: z.string({ required_error: 'name property is required' }),
@@ -25,4 +27,7 @@ export class Validation {
   static JWTToken = z.string({
     required_error: 'token is required to access this route',
   });
+  static RecoveryEmail = z
+    .string({ required_error: 'email property is required' })
+    .email({ message: 'invalid email' });
 }

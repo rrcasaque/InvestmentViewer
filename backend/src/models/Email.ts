@@ -3,4 +3,10 @@ export class Email {
     this.subject = subject;
     this.content = content;
   }
+  getSubject() {
+    return this.subject;
+  }
+  getContent() {
+    return this.content;
+  }
 }
