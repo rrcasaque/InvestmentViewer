@@ -25,11 +25,11 @@ export const validateToken = (
 
 export const getRecoveryCode = async (req: Request, res: Response) => {
   try {
-    const userEmail = req.body.email as string;
+    const userEmail = req.query.email as string;
     Validation.RecoveryEmail.parse(userEmail);
-    const emailContent = `código para recuperação de senha: ${
+    const emailContent = NodeMailer.generateHTMLEmail(
       getRandomValues(new Uint16Array(1))[0]
-    }`;
+    );
     const email = new Email('código para recuperação de senha', emailContent);
     await NodeMailer.sendEmail(userEmail, email);
     return res.send('email enviado!');
