@@ -5,6 +5,7 @@ import { Validation } from '../services/Validation';
 import { Email } from '../models/Email';
 import { NodeMailer } from '../services/NodeMailer';
 import { getRandomValues } from 'crypto';
+import { RecoveryCodeRepository } from '../repositories/RecoveryCodeRepository';
 
 export const validateToken = (
   req: Request,
@@ -27,10 +28,15 @@ export const getRecoveryCode = async (req: Request, res: Response) => {
   try {
     const userEmail = req.query.email as string;
     Validation.RecoveryEmail.parse(userEmail);
-    const emailContent = NodeMailer.generateHTMLEmail(
-      getRandomValues(new Uint16Array(1))[0]
-    );
+    const recoveryCode = getRandomValues(new Uint16Array(1))[0];
+    const emailContent = NodeMailer.generateHTMLEmail(recoveryCode);
     const email = new Email('código para recuperação de senha', emailContent);
+    await RecoveryCodeRepository.create({
+      data: {
+        value: recoveryCode,
+        expires: new Date(Date() + 1000 * 60 * 5).getTime(), // 5 minutes
+      },
+    });
     await NodeMailer.sendEmail(userEmail, email);
     return res.send('email enviado!');
   } catch (error: any) {

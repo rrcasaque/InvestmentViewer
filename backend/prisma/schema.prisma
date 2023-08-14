@@ -18,3 +18,9 @@ model User {
   profileImage String?
   stockWallet  Json?
 }
+
+model RecoveryCode {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  value   Int
+  expires Int
+}
