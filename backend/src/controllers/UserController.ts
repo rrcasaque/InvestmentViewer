@@ -1,11 +1,16 @@
 import { Request, Response } from 'express';
-import { UserType, Validation } from '../services/Validation';
+import {
+  RecoveryPasswordType,
+  UserType,
+  Validation,
+} from '../services/Validation';
 import { User } from '../models/User';
 import { UserRepository } from '../repositories/UserRepository';
 import { HandleError } from '../services/HandleError';
 import { JsonWebToken } from '../services/JsonWebToken';
 import { JwtToken } from '../models/JwtToken';
 import { Bcrypt } from '../services/Bcrypt';
+import { RecoveryCodeRepository } from '../repositories/RecoveryCodeRepository';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -76,6 +81,53 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const token = JsonWebToken.generateToken(JwtPayload);
     return res.status(200).json({ user, token });
+  } catch (error) {
+    const errors = HandleError.getErrors(error);
+    res.status(errors.status).json(errors.message);
+  }
+};
+
+export const recoveryPassword = async (req: Request, res: Response) => {
+  try {
+    const { recoveryCode, email, newPassword } =
+      req.body as RecoveryPasswordType;
+    Validation.RecoveryPassword.parse({
+      recoveryCode: recoveryCode,
+      email: email,
+      newPassword: newPassword,
+    });
+
+    const validateRecoveryCode = await RecoveryCodeRepository.findFirst({
+      where: {
+        value: recoveryCode,
+      },
+    });
+
+    const user = await UserRepository.findFirst({
+      where: {
+        email: email,
+      },
+    });
+
+    if (!user) throw new Error('invalid credentials');
+
+    if (!validateRecoveryCode) throw new Error('invalid recovery code');
+    if (validateRecoveryCode.userEmail !== email)
+      throw new Error(
+        'the recoveryCode sent does not belong to the email address provided'
+      );
+    if (validateRecoveryCode.expires >= new Date().getTime())
+      throw new Error('the recoveryCode already expired');
+
+    await UserRepository.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: newPassword,
+      },
+    });
+    res.status(200).json({ message: 'password updated successfully' });
   } catch (error) {
     const errors = HandleError.getErrors(error);
     res.status(errors.status).json(errors.message);

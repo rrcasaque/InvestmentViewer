@@ -6,6 +6,8 @@ export type JWTTokenType = z.infer<typeof Validation.JWTToken>;
 
 export type RecoveryEmailType = z.infer<typeof Validation.RecoveryEmail>;
 
+export type RecoveryPasswordType = z.infer<typeof Validation.RecoveryPassword>;
+
 export class Validation {
   static User = z.object({
     name: z.string({ required_error: 'name property is required' }),
@@ -30,4 +32,19 @@ export class Validation {
   static RecoveryEmail = z
     .string({ required_error: 'email property is required' })
     .email({ message: 'invalid email' });
+  static RecoveryPassword = z.object({
+    recoveryCode: z
+      .number({ required_error: 'recoveryCode property is required' })
+      .int({ message: 'recoveryCode must be a int number' }),
+    email: z
+      .string({ required_error: 'email property is required' })
+      .email({ message: 'invalid email' }),
+    newPassword: z
+      .string({ required_error: 'password property is required' })
+      .min(8, { message: 'minimum 8 digits' })
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
+        { message: 'password must be stronger' }
+      ),
+  });
 }
