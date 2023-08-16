@@ -20,7 +20,8 @@ model User {
 }
 
 model RecoveryCode {
-  id      String @id @default(auto()) @map("_id") @db.ObjectId
-  value   Int
-  expires Int
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  value     Int
+  userEmail String
+  expires   Int
 }

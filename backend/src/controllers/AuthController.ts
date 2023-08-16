@@ -34,6 +34,7 @@ export const getRecoveryCode = async (req: Request, res: Response) => {
     await RecoveryCodeRepository.create({
       data: {
         value: recoveryCode,
+        userEmail: userEmail,
         expires: new Date(Date() + 1000 * 60 * 5).getTime(), // 5 minutes
       },
     });
