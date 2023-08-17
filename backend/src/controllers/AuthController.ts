@@ -4,8 +4,10 @@ import { JsonWebToken } from '../services/JsonWebToken';
 import { Validation } from '../services/Validation';
 import { Email } from '../models/Email';
 import { NodeMailer } from '../services/NodeMailer';
-import { getRandomValues } from 'crypto';
 import { RecoveryCodeRepository } from '../repositories/RecoveryCodeRepository';
+import { UserRepository } from '../repositories/UserRepository';
+import { Error } from '../models/Error';
+import { Utils } from '../services/Utils';
 
 export const validateToken = (
   req: Request,
@@ -28,14 +30,18 @@ export const getRecoveryCode = async (req: Request, res: Response) => {
   try {
     const userEmail = req.query.email as string;
     Validation.RecoveryEmail.parse(userEmail);
-    const recoveryCode = getRandomValues(new Uint16Array(1))[0];
+    const user = await UserRepository.findFirst({
+      where: { email: userEmail },
+    });
+    if (!user) throw new Error('user email not found', 404);
+    const recoveryCode = parseInt(Utils.getRandomCode(6));
     const emailContent = NodeMailer.generateHTMLEmail(recoveryCode);
     const email = new Email('código para recuperação de senha', emailContent);
     await RecoveryCodeRepository.create({
       data: {
         value: recoveryCode,
         userEmail: userEmail,
-        expires: new Date(Date() + 1000 * 60 * 5).getTime(), // 5 minutes
+        expires: new Date(new Date().getTime() + 1000 * 60 * 5).getTime(), // 5 minutes
       },
     });
     await NodeMailer.sendEmail(userEmail, email);

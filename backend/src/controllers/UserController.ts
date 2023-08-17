@@ -118,7 +118,7 @@ export const recoveryPassword = async (req: Request, res: Response) => {
         'the recoveryCode sent does not belong to the email address provided',
         400
       );
-    if (validateRecoveryCode.expires >= new Date().getTime())
+    if (validateRecoveryCode.expires <= new Date().getTime())
       throw new Error('the recoveryCode already expired', 400);
 
     await UserRepository.update({
