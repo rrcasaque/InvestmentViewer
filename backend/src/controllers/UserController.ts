@@ -11,6 +11,7 @@ import { JsonWebToken } from '../services/JsonWebToken';
 import { JwtToken } from '../models/JwtToken';
 import { Bcrypt } from '../services/Bcrypt';
 import { RecoveryCodeRepository } from '../repositories/RecoveryCodeRepository';
+import { Error } from '../models/Error';
 
 export const createUser = async (req: Request, res: Response) => {
   try {
@@ -24,7 +25,7 @@ export const createUser = async (req: Request, res: Response) => {
     const findEmail = await UserRepository.findFirst({
       where: { email: email },
     });
-    if (findEmail) throw new Error('this email is already in use');
+    if (findEmail) throw new Error('this email is already in use', 409);
     const user = await UserRepository.create({
       data: {
         email: userObj.getEmail(),
@@ -63,12 +64,12 @@ export const loginUser = async (req: Request, res: Response) => {
         email: email,
       },
     });
-    if (!user) throw new Error('invalid credentials');
+    if (!user) throw new Error('user email not found', 404);
 
     const autorized = await Bcrypt.decrypt(password, user.password);
 
     if (!autorized)
-      throw new Error('unauthorized access, password is incorrect');
+      throw new Error('unauthorized access, password is incorrect', 401);
 
     const JwtPayload = new JwtToken(
       keepConnected
@@ -109,15 +110,16 @@ export const recoveryPassword = async (req: Request, res: Response) => {
       },
     });
 
-    if (!user) throw new Error('invalid credentials');
+    if (!user) throw new Error('user email not found', 404);
 
-    if (!validateRecoveryCode) throw new Error('invalid recovery code');
+    if (!validateRecoveryCode) throw new Error('recovery code not found', 404);
     if (validateRecoveryCode.userEmail !== email)
       throw new Error(
-        'the recoveryCode sent does not belong to the email address provided'
+        'the recoveryCode sent does not belong to the email address provided',
+        400
       );
     if (validateRecoveryCode.expires >= new Date().getTime())
-      throw new Error('the recoveryCode already expired');
+      throw new Error('the recoveryCode already expired', 400);
 
     await UserRepository.update({
       where: {

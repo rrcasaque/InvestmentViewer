@@ -20,19 +20,21 @@ class JWT implements IJWT {
   verifytoken(token: string, userIP: string): void {
     const JwtPayload = decode(token) as JwtPayload;
     if (JwtPayload.aud !== process.env.API_URL)
-      throw new Error('invalid token: audience is not valid for this address');
+      throw new Error(
+        '401:invalid token, audience is not valid for this address'
+      );
     if ((JwtPayload.exp as number) <= new Date().getTime())
-      throw new Error('invalid token: this token is expired');
+      throw new Error('401:invalid token, this token is expired');
     if ((JwtPayload.iat as number) >= new Date().getTime())
-      throw new Error('invalid token: issuedAt property is invalid');
+      throw new Error('401:invalid token, issuedAt property is invalid');
     if (JwtPayload.iss !== process.env.JWT_ISSUER)
-      throw new Error('invalid token: issuer property is invalid');
+      throw new Error('401:invalid token, issuer property is invalid');
     if (JwtPayload.jti !== userIP)
       throw new Error(
-        'invalid token: the current IP address is invalid for this token'
+        '401:invalid token, the current IP address is invalid for this token'
       );
     if ((JwtPayload.nbf as number) >= new Date().getTime())
-      throw new Error('invalid token: this token is not yet valid');
+      throw new Error('401:invalid token, this token is not yet valid');
   }
 }
 
