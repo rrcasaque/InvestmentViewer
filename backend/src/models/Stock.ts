@@ -12,6 +12,7 @@ export class Stock {
     private dividendYear: number,
     private image: string,
     private category: ECategory,
+    private subCategory: string,
     private percentParticipation: number,
     private historicalPrice: StockPrice[]
   ) {
@@ -24,6 +25,7 @@ export class Stock {
     this.dividendYear = dividendYear;
     this.image = image;
     this.category = category;
+    this.subCategory = subCategory;
     this.percentParticipation = percentParticipation;
   }
 }
