@@ -25,3 +25,18 @@ model RecoveryCode {
   userEmail String
   expires   Int
 }
+
+model Stock {
+  id                   String @id @default(auto()) @map("_id") @db.ObjectId
+  fullName             String
+  refName              String
+  currentValue         String
+  realValue            Float
+  buyValue             Float
+  amount               Int
+  dividendYear         Float
+  image                String
+  category             String
+  percentParticipation Float
+  historicalPrice      Json
+}
