@@ -126,7 +126,10 @@ export const recoveryPassword = async (req: Request, res: Response) => {
         id: user.id,
       },
       data: {
-        password: newPassword,
+        password: await Bcrypt.encrypt(
+          newPassword,
+          parseInt(process.env.SALT_NUMBER as string)
+        ),
       },
     });
     res.status(200).json({ message: 'password updated successfully' });
