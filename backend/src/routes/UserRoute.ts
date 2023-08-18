@@ -7,10 +7,9 @@ import {
 
 const router = Router();
 
-router.post('/register', createUser);
-
-router.post('/login', loginUser);
-
-router.patch('/recoveryPassword', recoveryPassword);
+router
+  .post('/register', createUser)
+  .post('/login', loginUser)
+  .patch('/recoveryPassword', recoveryPassword);
 
 export const UserRoute = router;
