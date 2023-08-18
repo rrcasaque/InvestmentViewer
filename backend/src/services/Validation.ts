@@ -47,4 +47,15 @@ export class Validation {
         { message: 'password must be stronger' }
       ),
   });
+  static Stock = z.object({
+    refName: z.string({ required_error: 'refName property is required' }),
+    buyValue: z
+      .number({ required_error: 'buyValue property is required' })
+      .nonnegative({ message: 'buyValue property dont cant be negative' }),
+    amount: z
+      .number({ required_error: 'amount property is required' })
+      .nonnegative({ message: 'amount property dont cant be negative' }),
+    category: z.string({ required_error: 'category property is required' }),
+    subCategory: z.string().optional(),
+  });
 }
