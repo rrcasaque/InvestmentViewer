@@ -27,16 +27,17 @@ model RecoveryCode {
 }
 
 model Stock {
-  id                   String @id @default(auto()) @map("_id") @db.ObjectId
-  fullName             String
+  id                   String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullName             String //from external api
   refName              String
-  currentValue         String
-  realValue            Float
+  currentValue         String //from external api
+  realValue            Float //from external api
   buyValue             Float
   amount               Int
-  dividendYear         Float
-  image                String
+  dividendYear         Float //from external api
+  image                String //from external api
   category             String
-  percentParticipation Float
-  historicalPrice      Json
+  subcategory          String?
+  percentParticipation Float?
+  historicalPrice      Json? //from external api 
 }
