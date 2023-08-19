@@ -1,8 +1,8 @@
 export enum ECategory {
-  CDB,
-  LCI,
-  LCA,
-  FII,
-  DEBENTURE,
-  FUND,
+  CDB = 'CDB',
+  LCI = 'LCI',
+  LCA = 'LCA',
+  FII = 'FII',
+  DEBENTURE = 'DEBENTURE',
+  FUND = 'FUND',
 }

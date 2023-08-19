@@ -8,6 +8,8 @@ export type RecoveryEmailType = z.infer<typeof Validation.RecoveryEmail>;
 
 export type RecoveryPasswordType = z.infer<typeof Validation.RecoveryPassword>;
 
+export type StockType = z.infer<typeof Validation.Stock>;
+
 export class Validation {
   static User = z.object({
     name: z.string({ required_error: 'name property is required' }),

@@ -10,11 +10,11 @@ export class Stock {
     private buyValue: number,
     private amount: number,
     private dividendYear: number,
-    private image: string,
     private category: ECategory,
-    private subCategory: string,
     private percentParticipation: number,
-    private historicalPrice: StockPrice[]
+    private image?: string,
+    private subCategory?: string,
+    private historicalPrice?: StockPrice[]
   ) {
     this.fullName = fullName;
     this.refName = refName;
@@ -27,5 +27,53 @@ export class Stock {
     this.category = category;
     this.subCategory = subCategory;
     this.percentParticipation = percentParticipation;
+  }
+
+  getFullName() {
+    return this.fullName;
+  }
+
+  getRefName() {
+    return this.refName;
+  }
+
+  getCurrentValue() {
+    return this.currentValue;
+  }
+
+  getRealValue() {
+    return this.realValue;
+  }
+
+  getBuyValue() {
+    return this.buyValue;
+  }
+
+  getAmount() {
+    return this.amount;
+  }
+
+  getDividendYear() {
+    return this.dividendYear;
+  }
+
+  getCategory() {
+    return this.category;
+  }
+
+  getPercentParticipation() {
+    return this.percentParticipation;
+  }
+
+  getImage() {
+    return this.image;
+  }
+
+  getSubCategory() {
+    return this.subCategory;
+  }
+
+  getHistoricalPrice() {
+    return this.historicalPrice;
   }
 }
