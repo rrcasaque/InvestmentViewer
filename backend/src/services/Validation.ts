@@ -58,6 +58,7 @@ export class Validation {
       .number({ required_error: 'amount property is required' })
       .nonnegative({ message: 'amount property dont cant be negative' }),
     category: z.string({ required_error: 'category property is required' }),
+    userId: z.string({ required_error: 'userId property is required' }),
     subCategory: z.string().optional(),
   });
 }

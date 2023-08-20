@@ -16,7 +16,7 @@ model User {
   email        String
   password     String
   profileImage String?
-  stockWallet  Json?
+  stockWallet  Stock[]
 }
 
 model RecoveryCode {
@@ -40,4 +40,6 @@ model Stock {
   subcategory          String?
   percentParticipation Float?
   historicalPrice      Json? //from external api 
+  author               User    @relation(fields: [authorId], references: [id])
+  authorId             String  @db.ObjectId
 }
