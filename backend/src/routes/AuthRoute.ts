@@ -1,8 +1,15 @@
 import { Router } from 'express';
-import { getRecoveryCode } from '../controllers/AuthController';
+import {
+  getRecoveryCode,
+  loginUser,
+  registerUser,
+} from '../controllers/AuthController';
 
 const router = Router();
 
-router.get('/recoveryCode', getRecoveryCode);
+router
+  .post('/register', registerUser)
+  .post('/login', loginUser)
+  .get('/recoveryCode', getRecoveryCode);
 
 export const AuthRoute = router;

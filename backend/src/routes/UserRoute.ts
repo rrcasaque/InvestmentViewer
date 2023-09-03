@@ -1,15 +1,11 @@
 import { Router } from 'express';
-import {
-  createUser,
-  loginUser,
-  recoveryPassword,
-} from '../controllers/UserController';
+import { recoveryPassword, updateUser } from '../controllers/UserController';
+import { validateToken } from '../controllers/AuthController';
 
 const router = Router();
 
 router
-  .post('/register', createUser)
-  .post('/login', loginUser)
+  .put('/', validateToken, updateUser)
   .patch('/recoveryPassword', recoveryPassword);
 
 export const UserRoute = router;
