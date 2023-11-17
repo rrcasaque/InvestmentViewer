@@ -12,8 +12,8 @@ export class Stock {
     private dividendYear: number,
     private category: ECategory,
     private percentParticipation: number,
-    private image?: string,
     private subCategory?: string,
+    private image?: string,
     private historicalPrice?: StockPrice[]
   ) {
     this.fullName = fullName;
