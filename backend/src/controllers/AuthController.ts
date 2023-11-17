@@ -106,7 +106,7 @@ export const validateToken = (
 
 export const getRecoveryCode = async (req: Request, res: Response) => {
   try {
-    const userEmail = req.query.email as string;
+    const { userEmail } = req.params;
     Validation.RecoveryEmail.parse(userEmail);
     const user = await UserRepository.findFirst({
       where: { email: userEmail },
