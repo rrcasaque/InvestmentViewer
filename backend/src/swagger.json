@@ -2,7 +2,7 @@
   "openapi": "3.0.3",
   "info": {
     "title": "Investment Viewer",
-    "description": "api description",
+    "description": "API description",
     "termsOfService": "http://swagger.io/terms/",
     "contact": {
       "email": "apiteam@swagger.io"
@@ -21,68 +21,39 @@
   "tags": [
     {
       "name": "user",
-      "description": "user api endpoint description"
+      "description": "User API endpoint description"
+    },
+    {
+      "name": "auth",
+      "description": "Authentication API endpoint description"
     }
   ],
   "paths": {
-    "/user": {
-      "post": {
+    "/user/recoveryPassword": {
+      "patch": {
         "tags": ["user"],
-        "summary": "Create user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "createUser",
+        "summary": "Recover password",
+        "description": "Recover user's password with a valid recovery code and set a new password.",
+        "operationId": "recoveryPassword",
         "requestBody": {
-          "description": "Created user object",
+          "description": "User password recovery data",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/createWithList": {
-      "post": {
-        "tags": ["user"],
-        "summary": "Creates list of users with given input array",
-        "description": "Creates list of users with given input array",
-        "operationId": "createUsersWithListInput",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/User"
+                "type": "object",
+                "properties": {
+                  "recoveryCode": {
+                    "type": "string",
+                    "example": "your-recovery-code"
+                  },
+                  "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                  },
+                  "newPassword": {
+                    "type": "string",
+                    "example": "new-password123"
+                  }
                 }
               }
             }
@@ -90,175 +61,40 @@
         },
         "responses": {
           "200": {
-            "description": "Successful operation",
+            "description": "Password recovered successfully",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "get": {
-        "tags": ["user"],
-        "summary": "Logs user into the system",
-        "description": "",
-        "operationId": "loginUser",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "description": "The user name for login",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "The password for login in clear text",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "headers": {
-              "X-Rate-Limit": {
-                "description": "calls per hour allowed by the user",
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              },
-              "X-Expires-After": {
-                "description": "date in UTC when token expires",
-                "schema": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              }
-            },
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Password updated successfully"
+                    }
+                  }
                 }
               }
             }
           },
           "400": {
-            "description": "Invalid username/password supplied"
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "get": {
-        "tags": ["user"],
-        "summary": "Logs out current logged in user session",
-        "description": "",
-        "operationId": "logoutUser",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/{username}": {
-      "get": {
-        "tags": ["user"],
-        "summary": "Get user by user name",
-        "description": "",
-        "operationId": "getUserByName",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be fetched. Use user1 for testing. ",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid username supplied"
+            "description": "Bad request, invalid recovery data"
           },
           "404": {
-            "description": "User not found"
+            "description": "User not found or recovery code expired"
           }
         }
-      },
+      }
+    },
+    "/user": {
       "put": {
         "tags": ["user"],
         "summary": "Update user",
-        "description": "This can only be done by the logged in user.",
+        "description": "Update a user.",
         "operationId": "updateUser",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "name that need to be deleted",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
-          "description": "Update an existent user in the store",
+          "description": "User object that needs to be updated",
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/x-www-form-urlencoded": {
               "schema": {
                 "$ref": "#/components/schemas/User"
               }
@@ -266,35 +102,384 @@
           }
         },
         "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["user"],
-        "summary": "Delete user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "deleteUser",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be deleted",
-            "required": true,
-            "schema": {
-              "type": "string"
+          "201": {
+            "description": "User updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
             }
-          }
-        ],
-        "responses": {
+          },
           "400": {
-            "description": "Invalid username supplied"
+            "description": "Bad request, user data is not valid"
           },
           "404": {
             "description": "User not found"
           }
         }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Create user",
+        "description": "Create a new user.",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "User object that needs to be created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, user data is not valid"
+          },
+          "409": {
+            "description": "Conflict, user with the same email already exists"
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Log in user",
+        "description": "Log in a user with valid credentials.",
+        "operationId": "loginUser",
+        "requestBody": {
+          "description": "User login credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "example": "password123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "user": {
+                      "$ref": "#/components/schemas/User"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "your-access-token"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized, invalid credentials"
+          }
+        }
+      }
+    },
+    "/auth/recoveryCode": {
+      "get": {
+        "tags": ["auth"],
+        "summary": "Get recovery code",
+        "description": "Get a recovery code to reset the user's password.",
+        "operationId": "getRecoveryCode",
+        "parameters": [
+          {
+            "name": "email",
+            "in": "query",
+            "description": "The user's email for password recovery",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Recovery code sent successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "123456"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, invalid email format"
+          },
+          "404": {
+            "description": "User not found or recovery code expired"
+          }
+        }
+      }
+    },
+    "/stock/getCategories": {
+      "get": {
+        "tags": ["stock"],
+        "summary": "Create a new stock",
+        "description": "Create a new stock entry.",
+        "operationId": "createStock",
+        "requestBody": {
+          "description": "Stock object that needs to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Stock created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewStock"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, stock data is not valid"
+          },
+          "401": {
+            "description": "Unauthorized, invalid token"
+          },
+          "404": {
+            "description": "User not found or category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/stock": {
+      "post": {
+        "tags": ["stock"],
+        "summary": "Create a new stock",
+        "description": "Create a new stock entry.",
+        "operationId": "createStock",
+        "requestBody": {
+          "description": "Stock object that needs to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Stock created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewStock"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, stock data is not valid"
+          },
+          "401": {
+            "description": "Unauthorized, invalid token"
+          },
+          "404": {
+            "description": "User not found or category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["stock"],
+        "summary": "Create a new stock",
+        "description": "Create a new stock entry.",
+        "operationId": "createStock",
+        "requestBody": {
+          "description": "Stock object that needs to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Stock created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewStock"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, stock data is not valid"
+          },
+          "401": {
+            "description": "Unauthorized, invalid token"
+          },
+          "404": {
+            "description": "User not found or category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": ["stock"],
+        "summary": "Create a new stock",
+        "description": "Create a new stock entry.",
+        "operationId": "createStock",
+        "requestBody": {
+          "description": "Stock object that needs to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Stock created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewStock"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, stock data is not valid"
+          },
+          "401": {
+            "description": "Unauthorized, invalid token"
+          },
+          "404": {
+            "description": "User not found or category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["stock"],
+        "summary": "Create a new stock",
+        "description": "Create a new stock entry.",
+        "operationId": "createStock",
+        "requestBody": {
+          "description": "Stock object that needs to be created",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StockType"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Stock created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewStock"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request, stock data is not valid"
+          },
+          "401": {
+            "description": "Unauthorized, invalid token"
+          },
+          "404": {
+            "description": "User not found or category not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     }
   },
@@ -309,11 +494,11 @@
           },
           "name": {
             "type": "string",
-            "example": "theUser"
+            "example": "John Doe"
           },
           "email": {
             "type": "string",
-            "example": "john@email.com"
+            "example": "john@example.com"
           },
           "password": {
             "type": "string",
@@ -323,19 +508,95 @@
         "xml": {
           "name": "user"
         }
-      }
-    },
-    "requestBodies": {
-      "UserArray": {
-        "description": "List of user object",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
+      },
+      "RecoveryCode": {
+        "type": "string",
+        "example": "123456"
+      },
+      "StockType": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 100
+          },
+          "buyValue": {
+            "type": "number",
+            "example": 111.11
+          },
+          "category": {
+            "type": "string",
+            "example": "CategoryName"
+          },
+          "refName": {
+            "type": "string",
+            "example": "StockName"
+          },
+          "userId": {
+            "type": "string",
+            "example": "64decdee3c5d467891b2e789"
+          },
+          "subCategory": {
+            "type": "string",
+            "example": "SubCategoryName"
+          }
+        },
+        "required": ["amount", "buyValue", "category", "refName", "userId"]
+      },
+      "NewStock": {
+        "type": "object",
+        "properties": {
+          "newStock": {
+            "$ref": "#/components/schemas/Stock"
+          }
+        }
+      },
+      "Stock": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "example": 100
+          },
+          "buyValue": {
+            "type": "number",
+            "example": 111.11
+          },
+          "category": {
+            "type": "string",
+            "example": "CategoryName"
+          },
+          "currentValue": {
+            "type": "number",
+            "example": 111.11
+          },
+          "dividendYear": {
+            "type": "number",
+            "example": 1
+          },
+          "fullName": {
+            "type": "string",
+            "example": "Stock Full Name"
+          },
+          "realValue": {
+            "type": "number",
+            "example": 0.091
+          },
+          "refName": {
+            "type": "string",
+            "example": "StockName"
+          },
+          "authorId": {
+            "type": "string",
+            "example": "64decdee3c5d467891b2e789"
+          },
+          "image": {
+            "type": "string",
+            "example": "https://image.png"
+          },
+          "subCategory": {
+            "type": "string",
+            "example": "SubCategoryName"
           }
         }
       }
