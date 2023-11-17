@@ -16,11 +16,12 @@ export const createStock = async (req: Request, res: Response) => {
   try {
     const { amount, buyValue, category, refName, userId, subCategory } =
       req.body as StockType;
+
     Validation.Stock.parse({
       amount: amount,
       buyValue: buyValue,
       category: category,
-      refName: refName.toUpperCase(),
+      refName: refName,
       subCategory: subCategory,
       userId: userId,
     });
@@ -37,7 +38,7 @@ export const createStock = async (req: Request, res: Response) => {
       throw new Error('category not found', 404);
     const stock = new Stock(
       stockInfo.getFullName(),
-      refName,
+      refName.toUpperCase(),
       stockInfo.getRegularValue(),
       stockInfo.getEquityValuePerShare(),
       buyValue,
@@ -58,6 +59,7 @@ export const createStock = async (req: Request, res: Response) => {
         fullName: stock.getFullName(),
         realValue: stock.getRealValue(),
         refName: stock.getRefName(),
+        percentParticipation: stock.getPercentParticipation(),
         authorId: userId,
       },
     });
@@ -107,7 +109,7 @@ export const updateStock = async (req: Request, res: Response) => {
       amount: amount,
       buyValue: buyValue,
       category: category,
-      refName: refName.toUpperCase(),
+      refName: refName,
       subCategory: subCategory,
       userId: userId,
       stockId: stockId,
@@ -125,7 +127,7 @@ export const updateStock = async (req: Request, res: Response) => {
 
     const stock = new Stock(
       stockInfo.getFullName(),
-      refName,
+      refName.toUpperCase(),
       stockInfo.getRegularValue(),
       stockInfo.getEquityValuePerShare(),
       buyValue,
@@ -152,6 +154,7 @@ export const updateStock = async (req: Request, res: Response) => {
         authorId: userId,
       },
     });
+    res.status(200).json({ message: 'updated stock successful' });
   } catch (error) {
     const errors = HandleError.getErrors(error);
     res.status(errors.status).json(errors.message);

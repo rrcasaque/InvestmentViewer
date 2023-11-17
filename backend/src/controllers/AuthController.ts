@@ -11,6 +11,9 @@ import { Utils } from '../services/Utils';
 import { Bcrypt } from '../services/Bcrypt';
 import { JwtToken } from '../models/JwtToken';
 import { User } from '../models/User';
+import { StockRepository } from '../repositories/StockRepository';
+import { Stock } from '../models/Stock';
+import { ECategory } from '../models/ECategory';
 
 export const registerUser = async (req: Request, res: Response) => {
   try {
@@ -79,8 +82,52 @@ export const loginUser = async (req: Request, res: Response) => {
       req.socket.remoteAddress as string
     );
 
+    const stocks = await StockRepository.findMany({
+      where: {
+        authorId: user.id,
+      },
+    });
+
+    const stockWallet = stocks.map((stock) => {
+      if (Object.keys(ECategory).includes(stock.category)) {
+        const newstock = new Stock(
+          stock.fullName,
+          stock.refName,
+          stock.currentValue,
+          stock.realValue,
+          stock.buyValue,
+          stock.amount,
+          stock.dividendYear,
+          ECategory[stock.category as keyof typeof ECategory],
+          stock.percentParticipation,
+          stock.subcategory ? stock.subcategory : undefined,
+          stock.image ? stock.image : undefined,
+          undefined
+        );
+        return newstock;
+      }
+    });
+
+    const autorizedUser = new User(
+      user.name,
+      user.email,
+      user.password,
+      user.profileImage ? user.profileImage : undefined,
+      stockWallet as Stock[]
+    );
+
     const token = JsonWebToken.generateToken(JwtPayload);
-    return res.status(200).json({ user, token });
+    return res.status(200).json({
+      autorizedUser: {
+        id: user.id,
+        name: autorizedUser.getName(),
+        email: autorizedUser.getEmail(),
+        password: autorizedUser.getPassword(),
+        profileImage: autorizedUser.getProfileImage(),
+        stockWallet: autorizedUser.getStockWallet(),
+      },
+      token,
+    });
   } catch (error) {
     const errors = HandleError.getErrors(error);
     res.status(errors.status).json(errors.message);
