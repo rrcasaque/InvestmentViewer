@@ -10,6 +10,6 @@ const router = Router();
 router
   .post('/register', registerUser)
   .post('/login', loginUser)
-  .get('/recoveryCode', getRecoveryCode);
+  .get('/recoveryCode/:userEmail', getRecoveryCode);
 
 export const AuthRoute = router;

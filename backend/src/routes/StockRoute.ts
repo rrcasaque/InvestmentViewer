@@ -1,15 +1,20 @@
 import { Router } from 'express';
 import {
   createStock,
+  deleteStock,
   getStockCategories,
-  teste,
+  getStocks,
+  updateStock,
 } from '../controllers/StockController';
 import { validateToken } from '../controllers/AuthController';
 
 const router = Router();
 
 router
+  .get('/getCategories', validateToken, getStockCategories)
+  .get('/:userId', validateToken, getStocks)
   .post('/', validateToken, createStock)
-  .get('/', validateToken, getStockCategories);
+  .put('/', validateToken, updateStock)
+  .delete('/:stockId', validateToken, deleteStock);
 
 export const StockRoute = router;
