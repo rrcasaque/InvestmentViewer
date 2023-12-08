@@ -140,17 +140,17 @@ export const validateToken = (
   next: NextFunction
 ) => {
   try {
-    const tokenValidate = req.body.token as string;
-    const token = req.headers.authorization?.split(' ')[1] as string;
+    const validate = req.query.validate;
+    const token = req.headers.authorization as string;
     const userIP = req.socket.remoteAddress as string;
-
-    if (tokenValidate) {
-      JsonWebToken.verifytoken(tokenValidate, userIP);
-      return res.json({ message: 'token is valid!' });
-    }
 
     Validation.JWTToken.parse(token);
     JsonWebToken.verifytoken(token, userIP);
+
+    if (validate) {
+      return res.json({ message: 'token is valid!' });
+    }
+
     next();
   } catch (error) {
     const errors = HandleError.getErrors(error);
