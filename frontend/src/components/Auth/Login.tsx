@@ -3,13 +3,20 @@ import {
   Flex,
   FormControl,
   FormLabel,
+  Image,
   Input,
   InputGroup,
   InputRightElement,
-  Text,
+  Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { API } from "../../consts/endpoints";
+import { useAuthStore } from "../../contexts/AuthStore";
+import { COLORS } from "../../themes/colors";
 
 interface LoginProps {
   rotate: string;
@@ -18,9 +25,38 @@ interface LoginProps {
 }
 
 export const Login = (props: LoginProps) => {
+  const navigate = useNavigate();
+  const toast = useToast();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const loginUser = async (email: string, password: string) => {
+    const payload = {
+      email: email,
+      password: password,
+    };
+
+    try {
+      setLoading(true);
+      const res = await axios.post(API.AUTH.LOGIN, payload);
+      useAuthStore.setState({ isAuthenticated: true });
+      localStorage.setItem("token", res.data.token);
+      navigate("/dashboard");
+      setLoading(false);
+    } catch (error: any) {
+      setLoading(false);
+      return toast({
+        title: "Erro",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
 
   return (
     <Flex
@@ -36,17 +72,17 @@ export const Login = (props: LoginProps) => {
       border-radius="10px"
       transition="700ms"
       borderRadius="15px"
-      backgroundImage="linear-gradient(to left top, #2a32e7, #0052f2, #006bf9, #0081fc, #2496fc, #4f98fc, #699afc, #7e9cfc, #9f89f5, #c171e4, #df52c8, #f423a2)"
+      bg={COLORS.PRIMARY}
       direction="column"
       transform={props.rotate}
       zIndex={props.index}
     >
-      <Text fontSize="36px" w="100%" align="center">
-        Sign In
-      </Text>
-      <Flex w="75%" as="form" direction="column" h="75%" justify="center">
+      <Flex bg={COLORS.COMPLEMENTARY} w="full" align="center" justify="center">
+        <Image src="./darkLogo.png" w="200px" />
+      </Flex>
+      <Flex h="64%" w="75%" as="form" direction="column" justify="center">
         <FormControl mb="8px">
-          <FormLabel>Email:</FormLabel>
+          <FormLabel color={COLORS.LIGHT}>Email:</FormLabel>
           <Input
             type="email"
             value={email}
@@ -58,7 +94,7 @@ export const Login = (props: LoginProps) => {
           />
         </FormControl>
         <FormControl mb="8px">
-          <FormLabel>Senha:</FormLabel>
+          <FormLabel color={COLORS.LIGHT}>Senha:</FormLabel>
           <InputGroup>
             <Input
               value={password}
@@ -83,26 +119,23 @@ export const Login = (props: LoginProps) => {
         </FormControl>
         <Button
           type="submit"
-          onClick={(e) => {
+          onClick={async (e) => {
             e.preventDefault();
-            login(email, password);
+            loginUser(email, password);
           }}
-          colorScheme="blackAlpha"
+          bg={COLORS.COMPLEMENTARY}
+          color={COLORS.BLACK}
+          _hover={{
+            filter: "brightness(0.85)",
+          }}
           w="50%"
           alignSelf="center"
           mt="8px"
         >
-          Entrar
+          {loading ? <Spinner color={COLORS.PRIMARY} /> : "Entrar"}
         </Button>
       </Flex>
       {props.children}
     </Flex>
   );
-};
-
-const login = (email: string, password: string) => {
-  console.log({
-    email: email,
-    password: password,
-  });
 };
