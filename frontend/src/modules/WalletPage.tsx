@@ -1,8 +1,28 @@
 import { Button, Flex } from "@chakra-ui/react";
 import { Sidebar } from "../components/Sidebar/Sidebar";
 import { showModal } from "../contexts/ModalStore";
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { API } from "../consts/endpoints";
 
 export const WalletPage = () => {
+  const [categories, setCategories] = useState();
+
+  const getCategories = async () => {
+    const categories = await (
+      await axios.get(API.STOCK.GET_CATEGORIES, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+    ).data.stockCategories;
+    setCategories(categories);
+  };
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
   return (
     <Flex
       w="full"
@@ -24,7 +44,7 @@ export const WalletPage = () => {
       >
         <Button
           onClick={() => {
-            showModal("CreateStockModal");
+            showModal("CreateStockModal", { categories: categories });
           }}
         >
           Adicionar Investimento
