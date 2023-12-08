@@ -1,6 +1,9 @@
-import { Flex } from "@chakra-ui/react";
+import { Button, Flex } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 export const LandingPage = () => {
+  const navigate = useNavigate();
+
   return (
     <Flex
       w="full"
@@ -9,8 +12,10 @@ export const LandingPage = () => {
       justify="center"
       bg="black"
       color="white"
+      direction="column"
     >
       landing page
+      <Button onClick={() => navigate("/auth")}>Fazer login</Button>
     </Flex>
   );
 };
