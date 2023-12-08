@@ -19,8 +19,13 @@ export const App = () => {
   useEffect(() => {
     const validateToken = async () => {
       try {
-        await axios.post(API.AUTH.VALIDATE_TOKEN, {
-          token: localStorage.getItem("token"),
+        await axios.get(API.AUTH.VALIDATE_TOKEN, {
+          params: {
+            validate: true,
+          },
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
         });
         useAuthStore.setState({ isAuthenticated: true });
         setLoading(false);
