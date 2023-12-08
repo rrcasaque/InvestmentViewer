@@ -12,6 +12,6 @@ router
   .post('/register', registerUser)
   .post('/login', loginUser)
   .get('/recoveryCode/:userEmail', getRecoveryCode)
-  .post('/validateToken', validateToken);
+  .get('/validateToken', validateToken);
 
 export const AuthRoute = router;
