@@ -1,13 +1,29 @@
 import { ModalBody, ModalProps } from "@chakra-ui/modal";
 import { CustomModal } from "../CustomModal";
+import { ModalCloseButton, ModalHeader } from "@chakra-ui/react";
+
+interface CreateStockModalProps extends ModalProps {
+  categories?: any;
+}
 
 export const CreateStockModal = ({
-  onClose,
   isOpen,
-}: Pick<ModalProps, "onClose" | "isOpen">) => {
+  onClose,
+  categories,
+}: CreateStockModalProps) => {
   return (
     <CustomModal isOpen={isOpen} onClose={onClose} noCentered={true}>
-      <ModalBody>aa</ModalBody>
+      <ModalHeader
+        w="full"
+        fontWeight="bold"
+        fontSize="20px"
+        display="flex"
+        justifyContent="space-between"
+      >
+        Criação
+        <ModalCloseButton color="gray.700" />
+      </ModalHeader>
+      <ModalBody>{categories.CDB}</ModalBody>
     </CustomModal>
   );
 };
