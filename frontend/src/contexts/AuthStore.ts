@@ -1,13 +1,9 @@
 import { create } from "zustand";
+import { devtools } from "zustand/middleware";
 
-interface AuthState {
-  isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
-}
-
-export const useAuthStore = create<AuthState>((set) => ({
+const authState = {
   isAuthenticated: false,
-  login: () => set({ isAuthenticated: true }),
-  logout: () => set({ isAuthenticated: false }),
-}));
+  user: {},
+};
+
+export const useAuthStore = create(devtools(() => authState));
