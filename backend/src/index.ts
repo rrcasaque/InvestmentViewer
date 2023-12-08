@@ -1,12 +1,15 @@
 import express from 'express';
 import swaggerUI from 'swagger-ui-express';
 import swaggerJson from './swagger.json';
+import cors from 'cors';
 import { UserRoute } from './routes/UserRoute';
 import { AuthRoute } from './routes/AuthRoute';
 import { StockRoute } from './routes/StockRoute';
 
 const app = express();
 const port = 3000;
+
+app.use(cors());
 
 app.use(express.json());
 

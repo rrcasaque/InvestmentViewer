@@ -140,8 +140,15 @@ export const validateToken = (
   next: NextFunction
 ) => {
   try {
+    const tokenValidate = req.body.token as string;
     const token = req.headers.authorization?.split(' ')[1] as string;
     const userIP = req.socket.remoteAddress as string;
+
+    if (tokenValidate) {
+      JsonWebToken.verifytoken(tokenValidate, userIP);
+      return res.json({ message: 'token is valid!' });
+    }
+
     Validation.JWTToken.parse(token);
     JsonWebToken.verifytoken(token, userIP);
     next();

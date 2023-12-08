@@ -3,6 +3,7 @@ import {
   getRecoveryCode,
   loginUser,
   registerUser,
+  validateToken,
 } from '../controllers/AuthController';
 
 const router = Router();
@@ -10,6 +11,7 @@ const router = Router();
 router
   .post('/register', registerUser)
   .post('/login', loginUser)
-  .get('/recoveryCode/:userEmail', getRecoveryCode);
+  .get('/recoveryCode/:userEmail', getRecoveryCode)
+  .post('/validateToken', validateToken);
 
 export const AuthRoute = router;
