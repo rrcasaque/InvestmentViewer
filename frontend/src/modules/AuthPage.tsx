@@ -2,6 +2,7 @@ import { Flex, Link } from "@chakra-ui/react";
 import { useState } from "react";
 import { Login } from "../components/Auth/Login";
 import { Register } from "../components/Auth/Register";
+import { COLORS } from "../themes/colors";
 
 export const AuthPage = () => {
   const [start, setStart] = useState(true);
@@ -33,12 +34,12 @@ export const AuthPage = () => {
         bg="black"
       >
         <Login rotate={login.rotate} index={login.index}>
-          <Link textAlign="center" color="white" onClick={changePage}>
+          <Link textAlign="center" color={COLORS.WHITE} onClick={changePage}>
             Não possui cadastro? Cadastre-se
           </Link>
         </Login>
         <Register rotate={register.rotate} index={register.index}>
-          <Link textAlign="center" color="white" onClick={changePage}>
+          <Link textAlign="center" color={COLORS.BLACK} onClick={changePage}>
             Já possui cadastro? Faça Login
           </Link>
         </Register>

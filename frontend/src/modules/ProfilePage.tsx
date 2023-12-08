@@ -1,6 +1,7 @@
 import { Flex } from "@chakra-ui/react";
+import { Sidebar } from "../components/Sidebar/Sidebar";
 
-export const UnauthorizedPage = () => {
+export const ProfilePage = () => {
   return (
     <Flex
       w="full"
@@ -10,7 +11,7 @@ export const UnauthorizedPage = () => {
       bg="black"
       color="white"
     >
-      unauthorized
+      <Sidebar />
     </Flex>
   );
 };

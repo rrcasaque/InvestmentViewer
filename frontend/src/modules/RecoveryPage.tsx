@@ -1,6 +1,6 @@
 import { Flex } from "@chakra-ui/react";
 
-export const UnauthorizedPage = () => {
+export const RecoveryPassword = () => {
   return (
     <Flex
       w="full"
@@ -10,7 +10,7 @@ export const UnauthorizedPage = () => {
       bg="black"
       color="white"
     >
-      unauthorized
+      recovery
     </Flex>
   );
 };
