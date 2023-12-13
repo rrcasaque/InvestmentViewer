@@ -11,37 +11,41 @@ import { API } from "./consts/endpoints";
 import { useAuthStore } from "./contexts/AuthStore";
 import { ProfilePage } from "./modules/ProfilePage";
 import { WalletPage } from "./modules/WalletPage";
+import { SkeletonPage } from "./modules/SkeletonPage";
+
+const protectedRoutes = ["/dashboard", "/profile", "/wallet"];
 
 export const App = () => {
   const [loading, setLoading] = useState(true);
+  const [protectedPage, setProtectedPage] = useState(false);
   const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
-    const validateToken = async () => {
-      try {
-        await axios.get(API.AUTH.VALIDATE_TOKEN, {
-          params: {
-            validate: true,
-          },
-          headers: {
-            Authorization: localStorage.getItem("token"),
-          },
-        });
-        useAuthStore.setState({ isAuthenticated: true });
-        setLoading(false);
-      } catch (error) {
-        console.log(error);
-        useAuthStore.setState({ isAuthenticated: false });
-        setLoading(false);
-      }
-    };
-
-    validateToken();
+    if (protectedRoutes.includes(window.location.pathname) && !isAuthenticated)
+      validateToken();
+    setLoading(false);
   }, [isAuthenticated]);
 
-  return loading ? (
-    <h1>carregando</h1>
-  ) : (
+  const validateToken = async () => {
+    setProtectedPage(true);
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    try {
+      await axios.get(API.AUTH.VALIDATE_TOKEN, {
+        params: {
+          validate: true,
+        },
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      });
+      useAuthStore.setState({ isAuthenticated: true });
+    } catch (error) {
+      useAuthStore.setState({ isAuthenticated: false });
+    }
+    setProtectedPage(false);
+  };
+
+  return loading !== true && protectedPage !== true ? (
     <BrowserRouter>
       <Routes>
         <Route path="*" element={<NotFoundPage />} />
@@ -75,6 +79,8 @@ export const App = () => {
         />
       </Routes>
     </BrowserRouter>
+  ) : (
+    <SkeletonPage />
   );
 };
 

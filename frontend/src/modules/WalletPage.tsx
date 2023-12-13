@@ -1,22 +1,31 @@
-import { Button, Flex } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import { Sidebar } from "../components/Sidebar/Sidebar";
 import { showModal } from "../contexts/ModalStore";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { API } from "../consts/endpoints";
+import { WalletHeader } from "../components/Wallet/WalletHeader";
+import { WalletTable } from "../components/Wallet/WalletTable";
+import { WalletActions } from "../components/Wallet/WalletActions";
+import { useAuthStore } from "../contexts/AuthStore";
 
 export const WalletPage = () => {
   const [categories, setCategories] = useState();
+  const [investmentType, setInvestmentType] = useState("fixedAndVariable");
 
   const getCategories = async () => {
-    const categories = await (
-      await axios.get(API.STOCK.GET_CATEGORIES, {
-        headers: {
-          Authorization: localStorage.getItem("token"),
-        },
-      })
-    ).data.stockCategories;
-    setCategories(categories);
+    if (!localStorage.getItem("token")) {
+      useAuthStore.setState({ isAuthenticated: false });
+    } else {
+      const categories = await (
+        await axios.get(API.STOCK.GET_CATEGORIES, {
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        })
+      ).data.stockCategories;
+      setCategories(categories);
+    }
   };
 
   useEffect(() => {
@@ -35,20 +44,25 @@ export const WalletPage = () => {
     >
       <Sidebar />
       <Flex
-        bg={"rgba(0, 0, 0, 0.8)"}
+        bg={"rgba(0, 0, 0, 0.5)"}
         backdropFilter="blur(5px)"
         w="calc(100vw - 360px)"
-        minH="calc(100vh - 60px)"
+        h="calc(100vh - 60px)"
+        position="relative"
         ml="300px"
         borderRadius="15px"
+        direction="column"
       >
-        <Button
-          onClick={() => {
-            showModal("CreateStockModal", { categories: categories });
-          }}
-        >
-          Adicionar Investimento
-        </Button>
+        <Flex w="full" direction="column" maxW="100%">
+          <WalletActions />
+          <Flex w="full" px="18px" direction="column">
+            <WalletHeader
+              amount={1234.56}
+              setInvestmentType={setInvestmentType}
+            />
+            <WalletTable />
+          </Flex>
+        </Flex>
       </Flex>
     </Flex>
   );

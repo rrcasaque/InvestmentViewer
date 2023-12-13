@@ -1,5 +1,6 @@
 import {
   Button,
+  Checkbox,
   Flex,
   FormControl,
   FormLabel,
@@ -32,11 +33,13 @@ export const Login = (props: LoginProps) => {
   const [password, setPassword] = useState("");
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [keepConnected, setKeepConnected] = useState(false);
 
   const loginUser = async (email: string, password: string) => {
     const payload = {
       email: email,
       password: password,
+      keepConnected: keepConnected,
     };
 
     try {
@@ -117,6 +120,16 @@ export const Login = (props: LoginProps) => {
             </InputRightElement>
           </InputGroup>
         </FormControl>
+        <Flex align="center" justify="center">
+          <Checkbox
+            onChange={(e) => {
+              setKeepConnected(e.currentTarget.checked);
+            }}
+            color={COLORS.WHITE}
+          >
+            Manter-me conectado
+          </Checkbox>
+        </Flex>
         <Button
           type="submit"
           onClick={async (e) => {
