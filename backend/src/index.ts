@@ -9,7 +9,12 @@ import { StockRoute } from './routes/StockRoute';
 const app = express();
 const port = 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3001', 'https://investment-viewer.vercel.app'],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  })
+);
 
 app.use(express.json());
 
