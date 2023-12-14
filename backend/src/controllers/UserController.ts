@@ -12,6 +12,8 @@ import { JwtToken } from '../models/JwtToken';
 import { Bcrypt } from '../services/Bcrypt';
 import { RecoveryCodeRepository } from '../repositories/RecoveryCodeRepository';
 import { Error } from '../models/Error';
+import { GCloudStorage } from '../services/GCloudStorage';
+import { upload } from '../services/MulterUpload';
 
 export const recoveryPassword = async (req: Request, res: Response) => {
   try {
@@ -65,20 +67,31 @@ export const recoveryPassword = async (req: Request, res: Response) => {
 };
 
 export const updateUser = async (req: Request, res: Response) => {
+  if (req.file) {
+    upload.single('profileImage');
+  }
   try {
-    const { name, email, profileImage } = req.body as UserType;
-    const password = 'unecessary property';
-    Validation.User.parse({
+    const { name, email } = req.body as UserType;
+    Validation.EditUser.parse({
       name: name,
-      email: email,
-      password: password,
-      profileImage: profileImage,
     });
-    const userObj = new User(name, email, password, profileImage);
     const user = await UserRepository.findFirst({
       where: { email: email },
     });
     if (!user) throw new Error('user not found', 404);
+
+    const cloud = new GCloudStorage(process.env.BUCKET_NAME as string);
+
+    const userObj = new User(
+      name,
+      email,
+      user.password,
+      req.file
+        ? await cloud.uploadFile()
+        : user.profileImage
+        ? user.profileImage
+        : undefined
+    );
     return res.status(201).json(
       await UserRepository.update({
         where: {
