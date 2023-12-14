@@ -30,6 +30,9 @@ export class Validation {
       .url({ message: 'profileImage must be a valid url address' })
       .optional(),
   });
+  static EditUser = z.object({
+    name: z.string({ required_error: 'name property is required' }),
+  });
   static JWTToken = z.string({
     required_error: 'token is required to access this route',
   });
