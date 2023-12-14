@@ -5,9 +5,11 @@ import cors from 'cors';
 import { UserRoute } from './routes/UserRoute';
 import { AuthRoute } from './routes/AuthRoute';
 import { StockRoute } from './routes/StockRoute';
+import * as dotenv from 'dotenv';
+dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(
   cors({
