@@ -1,6 +1,6 @@
-import { Background } from "@/components/background/background";
-import { DashboardPage } from "@/modules/dashboard/dashboard";
-import { revalidateToken } from "@/services/revalidateToken";
+import { Background } from "../../../components/background/background";
+import { DashboardPage } from "../../../modules/dashboard/dashboard";
+import { revalidateToken } from "../../../services/revalidateToken";
 
 export default async function Dashboard() {
   await revalidateToken();

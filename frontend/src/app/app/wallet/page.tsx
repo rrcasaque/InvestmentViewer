@@ -1,6 +1,6 @@
-import { Background } from "@/components/background/background";
-import { WalletPage } from "@/modules/wallet/wallet";
-import { revalidateToken } from "@/services/revalidateToken";
+import { Background } from "../../../components/background/background";
+import { WalletPage } from "../../../modules/wallet/wallet";
+import { revalidateToken } from "../../../services/revalidateToken";
 
 export default async function Wallet() {
   await revalidateToken();
