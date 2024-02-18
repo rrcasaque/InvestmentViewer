@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 
 import * as React from "react";
+import { OrderIcon } from "@/assets/icons/OrderIcon";
 
 export interface DataTableProps<Data extends object> {
   data: Data[];
@@ -69,13 +70,13 @@ export function SortTable<Data extends object>({
                   className={thClass}
                 >
                   <div className="flex align-middle justify-center">
-                    <p>
+                    <p className="mr-1.5">
                       {flexRender(
                         header.column.columnDef.header,
                         header.getContext()
                       )}
                     </p>
-                    aa
+                    <OrderIcon fill="#ccc" width="16px" />
                   </div>
                 </TableHead>
               );

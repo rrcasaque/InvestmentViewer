@@ -2,26 +2,31 @@ import { SortTable } from "@/components/ui/sort-table";
 import { createColumnHelper } from "@tanstack/react-table";
 import "@/styles/colors.css";
 
-interface ExtractRec {
-  emissionDate: string;
-  clientName: string;
-  totalRetired: number;
+interface Wallet {
+  stockName: string;
+  stockCategory: string;
+  totalPrice: number;
+  managerName: string;
 }
 
-const columnHelper = createColumnHelper<ExtractRec>();
+const columnHelper = createColumnHelper<Wallet>();
 
 const columns = [
-  columnHelper.accessor("emissionDate", {
+  columnHelper.accessor("stockName", {
     cell: (info) => info.getValue(),
-    header: "Data de Emissão",
+    header: "Referência",
   }),
-  columnHelper.accessor("clientName", {
+  columnHelper.accessor("stockCategory", {
     cell: (info) => info.getValue(),
-    header: "Cliente",
+    header: "Categoria",
   }),
-  columnHelper.accessor("totalRetired", {
-    cell: (info) => info.getValue() + " MWh",
-    header: "Total Aposentado",
+  columnHelper.accessor("managerName", {
+    cell: (info) => info.getValue(),
+    header: "Emissor/Gestor",
+  }),
+  columnHelper.accessor("totalPrice", {
+    cell: (info) => "R$ " + info.getValue().toLocaleString(),
+    header: "Total investido",
     meta: {
       isNumeric: true,
     },
@@ -30,59 +35,70 @@ const columns = [
 
 const data = [
   {
-    clientName: "O boticário a",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1000,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário b",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1001,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
   {
-    clientName: "O boticário c",
-    emissionDate: new Date().toLocaleDateString(),
-    totalRetired: 1002,
+    stockName: "HGLG11",
+    stockCategory: "FII",
+    totalPrice: 1234.56,
+    managerName: "Itaú",
   },
 ];
 
