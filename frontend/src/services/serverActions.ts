@@ -6,11 +6,9 @@ import {
   LoginUserResponse,
   RegisterUserPayload,
   RegisterUserResponse,
-  ValidateTokenResponse,
 } from "@/models/Auth";
 import axios from "axios";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export const loginUser = async (
   payload: LoginUserPayload
@@ -47,6 +45,6 @@ export const validateToken = async () => {
     });
     return res.data;
   } catch (error: any) {
-    return error.response.data;
+    console.log(error);
   }
 };
