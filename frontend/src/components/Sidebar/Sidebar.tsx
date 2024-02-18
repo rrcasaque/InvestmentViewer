@@ -32,7 +32,7 @@ export const Sidebar = () => {
         <Link
           className={`${
             path === "/app/profile" ? "bg-primary-white" : "bg-primary"
-          } w-11/12 rounded-lg p-2.5 text-white font-semibold hover:bg-primary`}
+          } w-11/12 rounded-lg p-2.5 text-white font-semibold hover:bg-primary `}
           href={"/app/profile"}
         >
           Perfil
