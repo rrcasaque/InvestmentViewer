@@ -1,0 +1,85 @@
+.bg-primary {
+  background-color: #0e3b65;
+}
+
+.bg-primary-dark {
+  background-color: #0e2b46;
+}
+
+.bg-primary-white {
+  background-color: #3f709d;
+}
+
+.bg-secondary {
+  background-color: #6b7b8b;
+}
+
+.bg-secondary-white {
+  background-color: #b4c7da;
+}
+
+.bg-light {
+  background-color: #f5f5f5;
+}
+
+.bg-complementary {
+  background-color: #faf1ca;
+}
+
+.color-primary {
+  color: #0e3b65;
+}
+
+.color-primary-dark {
+  color: #0e2b46;
+}
+
+.color-primary-white {
+  color: #3f709d;
+}
+
+.color-secondary {
+  color: #6b7b8b;
+}
+
+.color-light {
+  color: #f5f5f5;
+}
+
+.color-complementary {
+  color: #faf1ca;
+}
+
+.border-primary-white {
+  border-color: #3f709d;
+}
+
+.table-row {
+  color: #3f709d;
+}
+
+.table-row:hover {
+  color: #0e2b46;
+}
+
+.max-h-wallet-table {
+  max-height: calc(100% - 190px);
+}
+
+.custom-scrool::-webkit-scrollbar {
+  width: 10px;
+  border-radius: 5px;
+}
+
+.custom-scrool::-webkit-scrollbar {
+  width: 10px;
+}
+.custom-scrool::-webkit-scrollbar-track {
+  background: #b4c7da;
+  border-radius: 5px;
+}
+
+.custom-scrool::-webkit-scrollbar-thumb {
+  background: #0e2b46;
+  border-radius: 5px;
+}
