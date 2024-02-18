@@ -1,6 +1,6 @@
 "use client";
 
-import "@/styles/colors.css";
+import "../../styles/colors.css";
 import Image from "next/image";
 import Link from "next/link";
 import { Profile } from "../profile/profile";

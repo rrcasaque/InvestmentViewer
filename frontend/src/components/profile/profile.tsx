@@ -1,9 +1,9 @@
 "use client";
 
-import "@/styles/colors.css";
+import "../../styles/colors.css";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useState, useEffect } from "react";
-import { removeAllCookies } from "@/services/manageCookies";
+import { removeAllCookies } from "../../services/manageCookies";
 import { useRouter } from "next/navigation";
 
 export const Profile = () => {

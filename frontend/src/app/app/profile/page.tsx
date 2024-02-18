@@ -1,6 +1,6 @@
-import { Background } from "@/components/background/background";
-import { ProfilePage } from "@/modules/profile/profile";
-import { revalidateToken } from "@/services/revalidateToken";
+import { Background } from "../../../components/background/background";
+import { ProfilePage } from "../../../modules/profile/profile";
+import { revalidateToken } from "../../../services/revalidateToken";
 
 export default async function Profile() {
   await revalidateToken();
