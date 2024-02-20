@@ -35,6 +35,7 @@ export const registerUser = async (
 export const validateToken = async () => {
   try {
     const token = cookies().get("token");
+    if (!token) throw new Error("Token not found");
     const res = await axios.get(API.AUTH.VALIDATE_TOKEN, {
       params: {
         validate: true,
@@ -45,6 +46,6 @@ export const validateToken = async () => {
     });
     return res.data;
   } catch (error: any) {
-    console.log(error);
+    console.log(error.message);
   }
 };

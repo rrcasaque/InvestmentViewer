@@ -1,6 +1,11 @@
+import { resolve } from "path";
 import { Background } from "../../../components/background/background";
 import { WalletPage } from "../../../modules/wallet/wallet";
 import { revalidateToken } from "../../../services/revalidateToken";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+export const fetchCache = "only-no-store";
 
 export default async function Wallet() {
   await revalidateToken();
