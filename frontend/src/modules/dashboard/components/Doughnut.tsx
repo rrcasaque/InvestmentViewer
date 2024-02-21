@@ -42,12 +42,19 @@ export const Doughnut = ({ dataGraphic }: DoughnutProps) => {
   }, []);
 
   return (
-    <div className="w-full flex items-center justify-start ">
-      <div className="w-2/5">
-        <Pie data={data} />
+    <div className="w-full flex items-end justify-center flex-col">
+      <div className="flex items-center justify-center w-2/5">
+        <Pie
+          data={data}
+          options={{
+            layout: {
+              padding: -10,
+            },
+          }}
+        />
       </div>
       {showLegend && (
-        <div className="flex items-start justify-around w-full ml-2 flex-col">
+        <div className="flex items-end justify-around w-full ml-2 mt-2 flex-col">
           {dataGraphic.map((data) => {
             return (
               <div

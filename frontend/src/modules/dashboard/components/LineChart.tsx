@@ -52,5 +52,16 @@ export const LineChart = ({
     ],
   };
 
-  return <Line data={data} />;
+  return (
+    <Line
+      data={data}
+      options={{
+        scales: {
+          x: {
+            position: "bottom",
+          },
+        },
+      }}
+    />
+  );
 };
