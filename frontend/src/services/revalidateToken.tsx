@@ -3,7 +3,6 @@ import { validateToken } from "./serverActions";
 import { AuthPage } from "@/modules/auth/auth";
 
 export const revalidateToken = async (url?: string, auth?: boolean) => {
-  console.log(1);
   const res = await validateToken();
   if (res && res.message && res.message === "token is valid!") {
     if (url) redirect(url);

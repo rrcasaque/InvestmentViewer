@@ -7,8 +7,6 @@ import {
 import { User } from '../models/User';
 import { UserRepository } from '../repositories/UserRepository';
 import { HandleError } from '../services/HandleError';
-import { JsonWebToken } from '../services/JsonWebToken';
-import { JwtToken } from '../models/JwtToken';
 import { Bcrypt } from '../services/Bcrypt';
 import { RecoveryCodeRepository } from '../repositories/RecoveryCodeRepository';
 import { Error } from '../models/Error';
@@ -72,9 +70,6 @@ export const updateUser = async (req: Request, res: Response) => {
   }
   try {
     const { name, email } = req.body as UserType;
-    Validation.EditUser.parse({
-      name: name,
-    });
     const user = await UserRepository.findFirst({
       where: { email: email },
     });

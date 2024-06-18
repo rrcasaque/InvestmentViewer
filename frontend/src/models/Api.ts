@@ -1,4 +1,5 @@
-const API_URL = "https://rrc-investment-viewer.rj.r.appspot.com";
+// const API_URL = "https://rrc-investment-viewer.rj.r.appspot.com";
+const API_URL = "http://localhost:3000";
 
 export const API = {
   AUTH: {
