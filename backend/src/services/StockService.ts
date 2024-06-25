@@ -40,4 +40,36 @@ export class StockService {
       ? balanceResult
       : [{ message: 'Aporte insuficiente' }];
   }
+  static groupByRefName(stockWallet: any) {
+    const result: { [key: string]: any } = {};
+
+    stockWallet.forEach((stock: any) => {
+      if (!result[stock.refName]) {
+        result[stock.refName] = {
+          fullName: stock.fullName,
+          refName: stock.refName,
+          currentValue: stock.currentValue,
+          realValue: stock.realValue,
+          buyValueSum: 0,
+          amountSum: 0,
+          dividendYear: stock.dividendYear,
+          category: stock.category,
+        };
+      }
+
+      result[stock.refName].buyValueSum += stock.buyValue * stock.amount;
+      result[stock.refName].amountSum += stock.amount;
+    });
+
+    return Object.values(result).map((stock) => ({
+      fullName: stock.fullName,
+      refName: stock.refName,
+      currentValue: stock.currentValue,
+      realValue: stock.realValue,
+      buyValue: stock.buyValueSum / stock.amountSum,
+      amount: stock.amountSum,
+      dividendYear: stock.dividendYear,
+      category: stock.category,
+    }));
+  }
 }

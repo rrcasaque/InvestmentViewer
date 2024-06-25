@@ -6,11 +6,23 @@ export interface LoginUserPayload {
 
 export interface LoginUserResponse {
   autorizedUser: {
-    id: number;
+    id: string;
     name: string;
     email: string;
     password: string;
+    investType: string;
     profileImage: string | null;
+    stockWallet: {
+      fullName: string;
+      refName: string;
+      currentValue: number;
+      realValue: number;
+      buyValue: number;
+      amount: number;
+      dividendYear: number;
+      category: string;
+      percentParticipation: number;
+    }[];
   };
   token: string;
 }
@@ -23,13 +35,26 @@ export interface RegisterUserPayload {
 
 export interface RegisterUserResponse {
   autorizedUser: {
-    id: number;
+    id: string;
     name: string;
     email: string;
     password: string;
+    investType: string;
     profileImage: string | null;
+    stockWallet: {
+      fullName: string;
+      refName: string;
+      currentValue: number;
+      realValue: number;
+      buyValue: number;
+      amount: number;
+      dividendYear: number;
+      category: string;
+      percentParticipation: number;
+    }[];
   };
   token: string;
+  message: string;
 }
 
 export interface ValidateTokenResponse {

@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation";
 import { loginUser } from "@/services/serverActions";
 import { setAuthCookies } from "@/services/manageCookies";
 import { Spinner } from "../../../../components/ui/spinner";
+import { useAuthStore } from "@/contexts/AuthStore";
 
 const formSchema = z.object({
   email: z
@@ -59,11 +60,17 @@ export const Login = ({ index, rotate, changePage }: LoginProps) => {
     });
     if (res.token) {
       setAuthCookies(res);
+      useAuthStore.setState({
+        token: res.token,
+        isAuthenticated: true,
+        user: res.autorizedUser,
+      });
       router.push("/app/dashboard");
     } else {
       toast({
+        title: "Acesso negado",
         variant: "destructive",
-        description: "Acesso negado, credenciais incorretas",
+        description: "Credenciais incorretas",
       });
     }
     setLoading(false);

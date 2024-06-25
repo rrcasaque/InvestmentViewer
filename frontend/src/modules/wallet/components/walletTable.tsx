@@ -3,30 +3,30 @@ import { createColumnHelper } from "@tanstack/react-table";
 import "@/styles/colors.css";
 
 interface Wallet {
-  stockName: string;
-  stockCategory: string;
-  totalPrice: number;
-  managerName: string;
+  refName: string;
+  category: string;
+  currentValue: number;
+  amount: number;
 }
 
 const columnHelper = createColumnHelper<Wallet>();
 
 const columns = [
-  columnHelper.accessor("stockName", {
+  columnHelper.accessor("refName", {
     cell: (info) => info.getValue(),
     header: "Referência",
   }),
-  columnHelper.accessor("stockCategory", {
+  columnHelper.accessor("category", {
     cell: (info) => info.getValue(),
     header: "Categoria",
   }),
-  columnHelper.accessor("managerName", {
+  columnHelper.accessor("currentValue", {
     cell: (info) => info.getValue(),
-    header: "Emissor/Gestor",
+    header: "Valor atual",
   }),
-  columnHelper.accessor("totalPrice", {
-    cell: (info) => "R$ " + info.getValue().toLocaleString(),
-    header: "Total investido",
+  columnHelper.accessor("amount", {
+    cell: (info) => info.getValue().toLocaleString(),
+    header: "Quantidade de cotas",
     meta: {
       isNumeric: true,
     },
@@ -102,7 +102,11 @@ const data = [
   },
 ];
 
-export const WalletTable = () => {
+interface WalletTableProps {
+  data: Wallet[];
+}
+
+export const WalletTable = ({ data }: WalletTableProps) => {
   return (
     <div className="w-full max-h-wallet-table overflow-auto custom-scrool">
       <SortTable

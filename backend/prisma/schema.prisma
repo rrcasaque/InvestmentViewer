@@ -13,6 +13,7 @@ model User {
   email        String
   password     String
   profileImage String?
+  investType   String
   stockWallet  Stock[]
 }
 
