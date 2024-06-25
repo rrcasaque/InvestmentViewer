@@ -5,12 +5,14 @@ export class User {
     private name: string,
     private email: string,
     private password: string,
+    private investType: string,
     private profileImage?: string,
     private stockWallet?: Stock[]
   ) {
     this.name = name;
     this.email = email;
     this.password = password;
+    this.investType = investType;
     this.profileImage = profileImage;
     this.stockWallet = stockWallet;
   }
@@ -28,5 +30,9 @@ export class User {
   }
   public getStockWallet() {
     return this.stockWallet;
+  }
+
+  public getInvestType() {
+    return this.investType;
   }
 }

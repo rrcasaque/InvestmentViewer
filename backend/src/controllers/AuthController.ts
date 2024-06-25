@@ -23,7 +23,7 @@ export const registerUser = async (req: Request, res: Response) => {
       email: email,
       password: password,
     });
-    const userObj = new User(name, email, password);
+    const userObj = new User(name, email, password, '');
     const findEmail = await UserRepository.findFirst({
       where: { email: email },
     });
@@ -36,6 +36,7 @@ export const registerUser = async (req: Request, res: Response) => {
           userObj.getPassword(),
           parseInt(process.env.SALT_NUMBER as string)
         ),
+        investType: '',
       },
     });
     const JwtPayload = new JwtToken(
@@ -45,7 +46,7 @@ export const registerUser = async (req: Request, res: Response) => {
       req.socket.remoteAddress as string
     );
     const token = JsonWebToken.generateToken(JwtPayload);
-    return res.status(201).json({ user, token });
+    return res.status(201).json({ autorizedUser: user, token });
   } catch (error) {
     const errors = HandleError.getErrors(error);
     res.status(errors.status).json(errors.message);
@@ -59,6 +60,7 @@ export const loginUser = async (req: Request, res: Response) => {
       email: email,
       password: password,
       name: 'userNameUnecessary',
+      investType: 'investTypeUnecessary',
     });
 
     const user = await UserRepository.findFirst({
@@ -112,6 +114,7 @@ export const loginUser = async (req: Request, res: Response) => {
       user.name,
       user.email,
       user.password,
+      user.investType,
       user.profileImage ? user.profileImage : undefined,
       stockWallet as Stock[]
     );
@@ -122,6 +125,7 @@ export const loginUser = async (req: Request, res: Response) => {
         id: user.id,
         name: autorizedUser.getName(),
         email: autorizedUser.getEmail(),
+        investType: autorizedUser.getInvestType(),
         password: autorizedUser.getPassword(),
         profileImage: autorizedUser.getProfileImage(),
         stockWallet: autorizedUser.getStockWallet(),
@@ -143,10 +147,12 @@ export const validateToken = (
     const validate = req.query.validate;
     const token = req.headers.authorization as string;
     const userIP = req.socket.remoteAddress as string;
-
-    Validation.JWTToken.parse(token);
-    JsonWebToken.verifytoken(token, userIP);
-
+    const validToken =
+      token.split(' ').length && token.split(' ').length > 1
+        ? token.split(' ')[1]
+        : token;
+    Validation.JWTToken.parse(validToken);
+    JsonWebToken.verifytoken(validToken, userIP);
     if (validate) {
       return res.json({ message: 'token is valid!' });
     }

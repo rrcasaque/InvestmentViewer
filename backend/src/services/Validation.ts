@@ -25,6 +25,7 @@ export class Validation {
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/,
         { message: 'password must be stronger' }
       ),
+    investType: z.string({ required_error: 'investType property is required' }),
     profileImage: z
       .string()
       .url({ message: 'profileImage must be a valid url address' })

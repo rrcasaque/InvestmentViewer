@@ -69,7 +69,7 @@ export const updateUser = async (req: Request, res: Response) => {
     upload.single('profileImage');
   }
   try {
-    const { name, email } = req.body as UserType;
+    const { name, email, investType } = req.body as UserType;
     const user = await UserRepository.findFirst({
       where: { email: email },
     });
@@ -81,6 +81,7 @@ export const updateUser = async (req: Request, res: Response) => {
       name,
       email,
       user.password,
+      investType,
       req.file
         ? await cloud.uploadFile()
         : user.profileImage
@@ -96,6 +97,7 @@ export const updateUser = async (req: Request, res: Response) => {
           email: userObj.getEmail(),
           name: userObj.getName(),
           profileImage: userObj.getProfileImage(),
+          investType: userObj.getInvestType(),
         },
       })
     );

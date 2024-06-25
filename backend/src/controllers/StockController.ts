@@ -11,6 +11,7 @@ import { StockRepository } from '../repositories/StockRepository';
 import { Error } from '../models/Error';
 import { UserRepository } from '../repositories/UserRepository';
 import { FundamentusService } from '../services/FundamentusService';
+import { StockService } from '../services/StockService';
 
 export const createStock = async (req: Request, res: Response) => {
   try {
@@ -76,14 +77,15 @@ export const getStocks = async (req: Request, res: Response) => {
     const { userId } = req.params;
     const user = await UserRepository.findFirst({ where: { id: userId } });
     if (!user) throw new Error('User not found', 404);
-
     const stockList = await StockRepository.findMany({
       where: {
         authorId: userId,
       },
     });
 
-    return res.status(200).json({ stockList });
+    return res
+      .status(200)
+      .json({ stockList: StockService.groupByRefName(stockList) });
   } catch (error) {
     const errors = HandleError.getErrors(error);
     res.status(errors.status).json(errors.message);
