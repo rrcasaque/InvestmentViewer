@@ -1,9 +1,11 @@
 import { cookies } from "next/headers";
 import { Sidebar } from "../../components/sidebar/sidebar";
 
-const user = JSON.parse(cookies().get("autorizedUser")?.value as string);
+export const dynamic = "force-dynamic";
 
-const AppLayout = ({ children }: { children: React.ReactNode }) => {
+const AppLayout = async ({ children }: { children: React.ReactNode }) => {
+  const cookieStore = cookies();
+  const user = JSON.parse(cookieStore.get("autorizedUser")?.value as string);
   return (
     <main className="w-full h-screen">
       <Sidebar user={user} />

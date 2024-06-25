@@ -1,4 +1,3 @@
-import { unstable_noStore } from "next/cache";
 import { Background } from "../../../components/background/background";
 import { WalletPage } from "../../../modules/wallet/wallet";
 import { revalidateToken } from "../../../services/revalidateToken";
@@ -7,9 +6,8 @@ import { getStocks } from "@/services/serverActions";
 export const dynamic = "force-dynamic";
 
 export default async function Wallet() {
-  unstable_noStore();
   await revalidateToken();
-  const stockList = await getStocks(); // Obtenha os dados aqui
+  const stockList = await getStocks();
 
   return (
     <main className="w-full h-screen flex items-center justify-center">

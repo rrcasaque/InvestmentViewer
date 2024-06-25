@@ -1,4 +1,5 @@
 "use server";
+
 import { API } from "@/models/Api";
 import {
   LoginUserPayload,
@@ -34,8 +35,9 @@ export const registerUser = async (
 
 export const updateInvestType = async (investType: number) => {
   try {
-    const token = cookies().get("token");
-    const user = JSON.parse(cookies().get("autorizedUser")?.value as string);
+    const cookieStore = cookies();
+    const token = cookieStore.get("token");
+    const user = JSON.parse(cookieStore.get("autorizedUser")?.value as string);
     if (!token) throw new Error("Token not found");
     const res = await axios.put(
       API.USER.EDIT_USER,
@@ -54,7 +56,8 @@ export const updateInvestType = async (investType: number) => {
 
 export const validateToken = async () => {
   try {
-    const token = cookies().get("token");
+    const cookieStore = cookies();
+    const token = cookieStore.get("token");
     if (!token) throw new Error("Token not found");
     const res = await axios.get(API.AUTH.VALIDATE_TOKEN, {
       params: {
@@ -72,8 +75,9 @@ export const validateToken = async () => {
 
 export const addStock = async (payload: AddStockPayload) => {
   try {
-    const token = cookies().get("token");
-    const user = cookies().get("autorizedUser");
+    const cookieStore = cookies();
+    const user = JSON.parse(cookieStore.get("autorizedUser")?.value as string);
+    const token = cookieStore.get("token");
     if (!token) throw new Error("Token not found");
     const res = await axios.post(
       API.STOCK.CREATE_STOCKS,
@@ -92,9 +96,12 @@ export const addStock = async (payload: AddStockPayload) => {
 };
 
 export const getStocks = async () => {
-  const userId = JSON.parse(cookies().get("autorizedUser")?.value as string).id;
+  const cookieStore = cookies();
+  const userId = JSON.parse(
+    cookieStore.get("autorizedUser")?.value as string
+  ).id;
   try {
-    const token = cookies().get("token");
+    const token = cookieStore.get("token");
     if (!token) throw new Error("Token not found");
     const res = await axios.get(`${API.STOCK.GET_STOCKS}/${userId}`, {
       headers: {

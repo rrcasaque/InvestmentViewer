@@ -1,3 +1,5 @@
+"use server";
+
 import { redirect } from "next/navigation";
 import { validateToken } from "./serverActions";
 import { AuthPage } from "@/modules/auth/auth";
