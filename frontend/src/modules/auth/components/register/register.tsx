@@ -24,6 +24,7 @@ import { useRouter } from "next/navigation";
 import { setAuthCookies } from "@/services/manageCookies";
 import { useState } from "react";
 import { Spinner } from "../../../../components/ui/spinner";
+import { useAuthStore } from "@/contexts/AuthStore";
 
 const formSchema = z.object({
   email: z
@@ -61,12 +62,19 @@ export const Register = ({ index, rotate, changePage }: RegisterProps) => {
     });
     if (res.token) {
       setAuthCookies(res);
+      useAuthStore.setState({
+        token: res.token,
+        isAuthenticated: true,
+        user: res.autorizedUser,
+      });
       router.push("/app/dashboard");
     } else {
-      toast({
-        variant: "destructive",
-        description: "Acesso negado, credenciais incorretas",
-      });
+      if (res.message === "this email is already in use")
+        toast({
+          title: "Acesso negado",
+          variant: "destructive",
+          description: "Esse e-mail já está em uso!",
+        });
     }
     setLoading(false);
   }

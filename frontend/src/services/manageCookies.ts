@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 export const setAuthCookies = (
   authResponse: LoginUserResponse | RegisterUserResponse
 ) => {
+  console.log(authResponse.autorizedUser);
   cookies().set("autorizedUser", JSON.stringify(authResponse.autorizedUser), {
     maxAge: 60 * 60 * 1000 * 24 * 30,
   });

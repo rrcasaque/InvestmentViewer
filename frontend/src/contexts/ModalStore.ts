@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 export enum EModals {
+  "InvestTestModal",
   "AddStockModal",
   "None",
 }
@@ -22,4 +23,5 @@ export const openModal = (modal: EModals) => {
   useModalStore.setState({ open: true, display: modal });
 };
 
-export const closeModal = () => useModalStore.setState({ open: false });
+export const closeModal = () =>
+  useModalStore.setState({ open: false, display: EModals.None });

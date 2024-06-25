@@ -6,7 +6,11 @@ import Link from "next/link";
 import { Profile } from "../profile/profile";
 import { usePathname } from "next/navigation";
 
-export const Sidebar = () => {
+interface SidebarProps {
+  user: any;
+}
+
+export const Sidebar = ({ user }: SidebarProps) => {
   const path = usePathname();
 
   return (
@@ -38,7 +42,7 @@ export const Sidebar = () => {
           Perfil
         </Link>
       </div>
-      <Profile />
+      <Profile user={user} />
     </div>
   );
 };
